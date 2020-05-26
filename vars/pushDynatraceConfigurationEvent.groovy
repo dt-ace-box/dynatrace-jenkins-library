@@ -1,7 +1,12 @@
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
+
+import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
+import static groovyx.net.http.Method.*
+import static groovyx.net.http.ContentType.*
 
 /***************************\
-  This function assumes we run on a Jenkins Agent that has curl command available.
+  This function assumes we run on a standard Jenkins Agent.
 
   Returns either 0(=no errors), 1(=pushing event failed)
 \***************************/
@@ -39,36 +44,34 @@ def call( Map args )
 
     int errorCode = 0
 
-    // build the curl command
-    int numberOfTags = tagRule[0].tags.size()
-    int numberOfProperties = customProperties.size()
 
-    // set Dynatrace URL, API Token and Event Type.
-    String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{"
-    curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\","
-    curlCmd += " \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
+    def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
 
-    // attach tag rules
-    curlCmd += " \\\"tags\\\" : [ "
-    tagRule[0].tags.eachWithIndex { tag, i ->
-        curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" }"
-        if(i < (numberOfTags - 1)) { curlCmd += ", " }
+    http.request( POST, JSON ) { req ->
+      headers.'Authorization' = 'Api-Token ' + dtApiToken
+      headers.'Content-Type' = 'application/json'
+      body = [
+        eventType: eventType,
+        attachRules: {
+          tagRule: [{
+            meTypes: [
+              tagRule[0].meTypes[0].meType
+            ]
+          }]
+        }
+        tags: tagRule[0].tags,
+        description: description,
+        source: source,
+        configuration: configuration,
+        customProperties: customProperties
+      ]
+      response.success = { resp, json ->
+        println "Config Event Posted Successfully! ${resp.status}"
+      }
+      response.failure = { resp, json ->
+        throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
+      }
     }
-    curlCmd += " ] }] },"
 
-    // set description, source, configuration
-    curlCmd += " \\\"description\\\":\\\"${description}\\\", \\\"source\\\":\\\"${source}\\\", \\\"configuration\\\":\\\"${configuration}\\\", "
-
-    // set custom properties
-    curlCmd += " \\\"customProperties\\\": { "
-    customProperties.eachWithIndex { property, i ->
-        curlCmd += "\\\"${property.key}\\\": \\\"${property.value}\\\""
-        if(i < (numberOfProperties - 1)) { curlCmd += ", " }
-    }
-    curlCmd += "} }\" "
-
-    // push the event
-    sh "${curlCmd}"
-
-    return errorCode
+    return 0
 }
