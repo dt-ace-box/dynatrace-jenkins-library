@@ -27,7 +27,6 @@ def DynatraceAPICall(Map args)
         Closure failureFunction
     */
 {
-  echo "Andrew's terrible library..."
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String httpMethod = args.containsKey("method") ? args.method : "GET"
