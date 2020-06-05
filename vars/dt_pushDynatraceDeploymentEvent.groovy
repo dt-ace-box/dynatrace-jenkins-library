@@ -59,7 +59,7 @@ def call( Map args )
               tagRule[0].meTypes[0].meType
             ]
           }]
-        }
+        },
         deploymentName: deploymentName,
         deploymentVersion: deploymentVersion,
         deploymentProject: deploymentProject,
