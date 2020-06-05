@@ -66,7 +66,6 @@ def call( Map args )
         ciBackLink: ciBackLink,
         remediationAction: remediationAction,
         tags: tagRule[0].tags,
-        description: description,
         source: "Jenkins",
         configuration: configuration,
         customProperties: customProperties
