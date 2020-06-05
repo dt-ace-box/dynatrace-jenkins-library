@@ -67,8 +67,6 @@ def call( Map args )
         remediationAction: remediationAction,
         tags: tagRule[0].tags,
         source: "Jenkins",
-        configuration: configuration,
-        customProperties: customProperties
       ]
       response.success = { resp, json ->
         println "Config Event Posted Successfully! ${resp.status}"
