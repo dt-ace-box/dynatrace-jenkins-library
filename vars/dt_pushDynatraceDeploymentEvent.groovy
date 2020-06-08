@@ -78,5 +78,5 @@ def call( Map args )
         throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
       }
     }
-    return 0
+    // return 0
 }
