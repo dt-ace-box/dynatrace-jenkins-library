@@ -26,6 +26,21 @@ def call( Map args ) {
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
+  def postBody = [
+    eventType: eventType,
+    attachRules: {
+      tagRule: tagRule
+    },
+    deploymentName: deploymentName,
+    deploymentVersion: deploymentVersion,
+    deploymentProject: deploymentProject,
+    ciBackLink: ciBackLink,
+    remediationAction: remediationAction,
+    tags: tagRule[0].tags,
+    source: "Jenkins"
+  ]
+
+
   // check minimum required params
   if(tagRule == "" ) {
     echo "tagRule is a mandatory parameter!"
@@ -38,27 +53,11 @@ def call( Map args ) {
   println dtTenantUrl + '/api/v1/events'
 
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
-  try{
-    http.request( POST, JSON ) { req ->
+
+  http.request( POST, JSON ) { req ->
       headers.'Authorization' = "Api-Token ${dtApiToken}"
       headers.'Content-Type' = 'application/json'
-      body = [
-      eventType: eventType,
-      attachRules: {
-        tagRule: [{
-          meTypes: [
-            tagRule[0].meTypes[0].meType
-          ]
-        }]
-      },
-      deploymentName: deploymentName,
-      deploymentVersion: deploymentVersion,
-      deploymentProject: deploymentProject,
-      ciBackLink: ciBackLink,
-      remediationAction: remediationAction,
-      tags: tagRule[0].tags,
-      source: "Jenkins"
-      ]
+      body = postBody
       response.success = { resp, json ->
         echo "Event Posted Successfully! ${resp.status}"
       }
@@ -66,11 +65,6 @@ def call( Map args ) {
         echo "Failed To Post Event: " + args.toMapString()
         throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
       }
-    }
   }
-  catch(Exception e){
-    echo "[dt_pushDynatraceDeploymentEvent.groovy] SEND EVENT: Exception caught: " + e.getMessage();
-  }
-
-  println "Why the f*** isn't the requet being sent? :L"
+  println "Why the f*** isn't the requet being sent?"
 }
