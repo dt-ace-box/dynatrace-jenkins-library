@@ -37,11 +37,13 @@ def call( Map args ) {
   // Somehow this runs.
   println dtTenantUrl + '/api/v1/events'
 
-  def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events?api-token=' + dtApiToken );
+  def http = new HTTPBuilder( dtTenantUrl );
 
   http.request( POST, JSON ) { req ->
-      // headers.'Authorization' = "Api-Token ${dtApiToken}"
-      // headers.'Content-Type' = 'application/json'
+    uri.path = '/api/v1/events'
+      headers.'Authorization' = "Api-Token ${dtApiToken}"
+      headers.'Content-Type' = 'application/json'
+
       body = [
           eventType: eventType,
           attachRules: {
@@ -59,13 +61,17 @@ def call( Map args ) {
           tags: tagRule[0].tags,
           source: "Jenkins"
       ]
+
+
       response.success = { resp, json ->
         echo "Event Posted Successfully! ${resp.status}"
       }
+
       response.failure = { resp, json ->
         echo "Failed To Post Event: " + args.toMapString()
         throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
       }
+
   }
   println "Why the f*** isn't the requet being sent?"
 }
