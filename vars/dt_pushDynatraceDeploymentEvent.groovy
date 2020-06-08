@@ -47,6 +47,8 @@ def call( Map args )
 
     String eventType = "CUSTOM_DEPLOYMENT"
 
+    println dtTenantUrl + '/api/config/v1/events'
+
     def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
     http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
