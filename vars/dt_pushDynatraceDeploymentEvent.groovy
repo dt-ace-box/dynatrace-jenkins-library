@@ -47,9 +47,10 @@ def call( Map args )
 
     String eventType = "CUSTOM_DEPLOYMENT"
 
-    println dtTenantUrl + '/api/config/v1/events'
+    // Somehow this runs.
+    println dtTenantUrl + '/api/v1/events'
 
-    def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
+    def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' )
     http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
       headers.'Content-Type' = 'application/json'
@@ -71,12 +72,13 @@ def call( Map args )
         source: "Jenkins",
       ]
       response.success = { resp, json ->
-        println "Config Event Posted Successfully! ${resp.status}"
+        println "Event Posted Successfully! ${resp.status}"
       }
       response.failure = { resp, json ->
         println "Failed To Post Event: " + args.toMapString(), resp
         throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
       }
     }
+    // Neither the success of failure ever run... Wot?
     // return 0
 }
