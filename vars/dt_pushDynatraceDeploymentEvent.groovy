@@ -31,7 +31,7 @@ def call( Map args ) {
 
   def postBody = [
     eventType: eventType,
-    attachRules: {tagRule: tagRule},
+    attachRules: [tagRule: tagRule],
     deploymentName: deploymentName,
     deploymentVersion: deploymentVersion,
     deploymentProject: deploymentProject,
@@ -55,16 +55,15 @@ def call( Map args ) {
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
   http.request( POST, JSON ) { req ->
-      headers.'Authorization' = "Api-Token ${dtApiToken}"
-      headers.'Content-Type' = 'application/json'
-      body = postBody
-      response.success = { resp, json ->
-        echo "Event Posted Successfully! ${resp.status}"
-      }
-      response.failure = { resp, json ->
-        echo "Failed To Post Event: " + args.toMapString()
-        throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
-      }
+    headers.'Authorization' = "Api-Token ${dtApiToken}"
+    headers.'Content-Type' = 'application/json'
+    body = postBody
+    response.success = { resp, json ->
+      echo "Event Posted Successfully! ${resp.status}"
+    }
+    response.failure = { resp, json ->
+      echo "Failed To Post Event: " + resp.toMapString()
+      return 1
+    }
   }
-  println "Why the f*** isn't the requet being sent?"
 }
