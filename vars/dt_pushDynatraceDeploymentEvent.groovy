@@ -69,7 +69,7 @@ def call( Map args )
         ciBackLink: ciBackLink,
         remediationAction: remediationAction,
         tags: tagRule[0].tags,
-        source: "Jenkins",
+        source: "Jenkins"
       ]
       response.success = { resp, json ->
         println "Event Posted Successfully! ${resp.status}"
