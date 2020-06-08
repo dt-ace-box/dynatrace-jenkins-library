@@ -18,8 +18,8 @@ def call( Map args ) {
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
   String description = args.containsKey("description") ? args.description : ""
-  String source = args.containsKey("source") ? args.source : "Jenkins"
-  String title = args.containsKey("title") ? args.title : ""
+  String source = args.containsKey("source") ? args.deploymentVersion : "Jenkins"
+  String title = args.containsKey("title") ? args.deploymentProject : ""
 
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
@@ -35,10 +35,10 @@ def call( Map args ) {
   def postBody = [
     eventType: eventType,
     attachRules: [tagRule: tagRule],
-    tags: tagRule[0].tags,
-    source: source,
     description: description,
-    customProperties: customProperties
+    customProperties,
+    tags: tagRule[0].tags,
+    source: source
   ]
 
 
