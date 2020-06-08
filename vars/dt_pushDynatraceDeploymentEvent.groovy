@@ -1,4 +1,4 @@
-@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1' )
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
 
 import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
