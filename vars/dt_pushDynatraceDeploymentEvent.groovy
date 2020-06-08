@@ -37,11 +37,11 @@ def call( Map args ) {
   // Somehow this runs.
   println dtTenantUrl + '/api/v1/events'
 
-  def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
+  def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events?api-token=' + dtApiToken );
 
   http.request( POST, JSON ) { req ->
-      headers.'Authorization' = "Api-Token ${dtApiToken}"
-      headers.'Content-Type' = 'application/json'
+      // headers.'Authorization' = "Api-Token ${dtApiToken}"
+      // headers.'Content-Type' = 'application/json'
       body = [
           eventType: eventType,
           attachRules: {
