@@ -21,12 +21,13 @@ def call( Map args ) {
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String title = args.containsKey("title") ? args.title : ""
 
+
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
   if(tagRule == "" ) {
-      echo "tagRule is a mandatory parameter!"
-      return 1
+    echo "tagRule is a mandatory parameter!"
+    return 1
   }
 
   String eventType = "CUSTOM_INFO"
@@ -40,15 +41,17 @@ def call( Map args ) {
     customProperties: customProperties
   ]
 
+
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
+
   http.request( POST, JSON ) { req ->
-    headers.'Authorization' = 'Api-Token ' + dtApiToken
+    headers.'Authorization' = "Api-Token ${dtApiToken}"
     headers.'Content-Type' = 'application/json'
 
     body = postBody
 
     response.success = { resp, json ->
-      println "${eventType} Event Posted Successfully! ${resp.status}"
+      echo "Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
       echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()

@@ -26,8 +26,13 @@ def call( Map args ) {
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
-  String eventType = "CUSTOM_DEPLOYMENT"
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
 
+  String eventType = "CUSTOM_DEPLOYMENT"
 
   def postBody = [
     eventType: eventType,
@@ -41,12 +46,6 @@ def call( Map args ) {
     source: "Jenkins"
   ]
 
-
-  // check minimum required params
-  if(tagRule == "" ) {
-    echo "tagRule is a mandatory parameter!"
-    return 1
-  }
 
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
