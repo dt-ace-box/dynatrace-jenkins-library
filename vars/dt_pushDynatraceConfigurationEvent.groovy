@@ -12,8 +12,7 @@ import static groovyx.net.http.ContentType.*
 \***************************/
 
 @NonCPS
-def call( Map args )
-{
+def call(Map args){
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -43,7 +42,7 @@ def call( Map args )
       customProperties: customProperties
     ]
 
-    def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
+    def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
     http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
