@@ -31,9 +31,7 @@ def call( Map args ) {
 
   def postBody = [
     eventType: eventType,
-    attachRules: {
-      tagRule: tagRule
-    },
+    attachRules: {tagRule: tagRule},
     deploymentName: deploymentName,
     deploymentVersion: deploymentVersion,
     deploymentProject: deploymentProject,
