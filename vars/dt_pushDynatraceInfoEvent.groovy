@@ -36,7 +36,7 @@ def call( Map args ) {
     eventType: eventType,
     attachRules: [tagRule: tagRule],
     description: description,
-    customProperties,
+    customProperties: customProperties,
     tags: tagRule[0].tags,
     source: source
   ]
