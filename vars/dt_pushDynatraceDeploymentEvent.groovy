@@ -11,7 +11,7 @@ import static groovyx.net.http.ContentType.*
   Returns either 0(=no errors), 1(=pushing event failed)
 \***************************/
 @NonCPS
-def call( Map args ) {
+def dt_pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
