@@ -13,48 +13,48 @@ import static groovyx.net.http.ContentType.*
 @NonCPS
 def call( Map args )
 {
-    // check input arguments
-    String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
-    String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-    def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
-    String description = args.containsKey("description") ? args.description : ""
-    String source = args.containsKey("source") ? args.source : "Jenkins"
-    String title = args.containsKey("title") ? args.title : ""
+  String description = args.containsKey("description") ? args.description : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String title = args.containsKey("title") ? args.title : ""
 
-    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
-    // check minimum required params
-    if(tagRule == "" ) {
-        echo "tagRule is a mandatory parameter!"
-        return 1
+  // check minimum required params
+  if(tagRule == "" ) {
+      echo "tagRule is a mandatory parameter!"
+      return 1
+  }
+
+  String eventType = "CUSTOM_INFO"
+
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    tags: tagRule[0].tags,
+    source: source,
+    description: description,
+    customProperties: customProperties
+  ]
+
+  def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
+  http.request( POST, JSON ) { req ->
+    headers.'Authorization' = 'Api-Token ' + dtApiToken
+    headers.'Content-Type' = 'application/json'
+
+    body = postBody
+
+    response.success = { resp, json ->
+      println "${eventType} Event Posted Successfully! ${resp.status}"
     }
-
-    String eventType = "CUSTOM_INFO"
-
-    def postBody = [
-      eventType: eventType,
-      attachRules: [tagRule: tagRule],
-      tags: tagRule[0].tags,
-      source: source,
-      description: description,
-      customProperties: customProperties
-    ]
-
-    def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
-    http.request( POST, JSON ) { req ->
-      headers.'Authorization' = 'Api-Token ' + dtApiToken
-      headers.'Content-Type' = 'application/json'
-
-      body = postBody
-
-      response.success = { resp, json ->
-        println "${eventType} Event Posted Successfully! ${resp.status}"
-      }
-      response.failure = { resp, json ->
-        echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
-        return 1
-      }
+    response.failure = { resp, json ->
+      echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
+      return 1
     }
-    return 0
+  }
+  return 0
 }

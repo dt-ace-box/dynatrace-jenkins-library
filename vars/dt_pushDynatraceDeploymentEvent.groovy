@@ -53,6 +53,7 @@ def call( Map args ) {
   http.request( POST, JSON ) { req ->
     headers.'Authorization' = "Api-Token ${dtApiToken}"
     headers.'Content-Type' = 'application/json'
+
     body = postBody
 
     response.success = { resp, json ->
