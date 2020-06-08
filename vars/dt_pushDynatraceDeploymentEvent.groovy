@@ -26,6 +26,9 @@ def call( Map args ) {
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
+  String eventType = "CUSTOM_DEPLOYMENT"
+
+
   def postBody = [
     eventType: eventType,
     attachRules: {
@@ -47,7 +50,6 @@ def call( Map args ) {
     return 1
   }
 
-  String eventType = "CUSTOM_DEPLOYMENT"
 
   // Somehow this runs.
   println dtTenantUrl + '/api/v1/events'
