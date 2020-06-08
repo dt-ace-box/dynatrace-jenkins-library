@@ -74,6 +74,7 @@ def call( Map args )
         println "Config Event Posted Successfully! ${resp.status}"
       }
       response.failure = { resp, json ->
+        println "Failed To Post Event: " + args.toMapString(), resp
         throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
       }
     }
