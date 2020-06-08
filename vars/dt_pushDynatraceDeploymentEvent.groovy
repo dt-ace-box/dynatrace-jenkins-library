@@ -48,22 +48,20 @@ def call( Map args ) {
     return 1
   }
 
-
-  // Somehow this runs.
-  println dtTenantUrl + '/api/v1/events'
-
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
   http.request( POST, JSON ) { req ->
     headers.'Authorization' = "Api-Token ${dtApiToken}"
     headers.'Content-Type' = 'application/json'
     body = postBody
+
     response.success = { resp, json ->
       echo "Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
-      echo "Failed To Post Event: " + resp.toMapString()
+      echo "[dt_pushDynatraceDeploymentEvent] Failed To Post Event: " + resp.toMapString()
       return 1
     }
   }
+  return 0
 }

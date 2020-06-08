@@ -10,18 +10,8 @@ import static groovyx.net.http.ContentType.*
 
   Returns either 0(=no errors), 1(=pushing event failed)
 \***************************/
+@NonCPS
 def call( Map args )
-
-    /*  String dtTenantUrl,
-        String dtApiToken
-        def tagRule
-
-        String description
-        String source
-        String configuration
-
-        def customProperties
-    */
 {
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -29,7 +19,7 @@ def call( Map args )
     def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
     String description = args.containsKey("description") ? args.description : ""
-    String source = args.containsKey("source") ? args.source : ""
+    String source = args.containsKey("source") ? args.source : "Jenkins"
     String title = args.containsKey("title") ? args.title : ""
 
     def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
@@ -42,38 +32,29 @@ def call( Map args )
 
     String eventType = "CUSTOM_INFO"
 
+    def postBody = [
+      eventType: eventType,
+      attachRules: [tagRule: tagRule],
+      tags: tagRule[0].tags,
+      source: source,
+      description: description,
+      customProperties: customProperties
+    ]
+
     def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
     http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
       headers.'Content-Type' = 'application/json'
-      body = [
-        eventType: eventType,
-        attachRules: {
-          tagRule: [{
-            meTypes: [
-              tagRule[0].meTypes[0].meType
-            ]
-          }]
-        }
-        deploymentName: deploymentName,
-        deploymentVersion: deploymentVersion,
-        deploymentProject: deploymentProject,
-        ciBackLink: ciBackLink,
-        remediationAction: remediationAction,
-        tags: tagRule[0].tags,
-        description: description,
-        source: "Jenkins",
-        configuration: configuration,
-        customProperties: customProperties
-      ]
+
+      body = postBody
+
       response.success = { resp, json ->
         println "${eventType} Event Posted Successfully! ${resp.status}"
       }
       response.failure = { resp, json ->
-        throw new Exception("Failed to POST ${eventType} Event. \nargs: \n${args.toMapString()}")
+        echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
+        return 1
       }
     }
-
-
     return 0
 }

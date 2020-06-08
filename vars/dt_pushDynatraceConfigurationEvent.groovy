@@ -10,18 +10,9 @@ import static groovyx.net.http.ContentType.*
 
   Returns either 0(=no errors), 1(=pushing event failed)
 \***************************/
+
+@NonCPS
 def call( Map args )
-
-    /*  String dtTenantUrl,
-        String dtApiToken
-        def tagRule
-
-        String description
-        String source
-        String configuration
-
-        def customProperties
-    */
 {
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -29,7 +20,7 @@ def call( Map args )
     def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
     String description = args.containsKey("description") ? args.description : ""
-    String source = args.containsKey("source") ? args.source : ""
+    String source = args.containsKey("source") ? args.source : "Jenkins"
     String configuration = args.containsKey("configuration") ? args.configuration : ""
 
     def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
@@ -37,39 +28,34 @@ def call( Map args )
     // check minimum required params
     if(tagRule == "" ) {
         echo "tagRule is a mandatory parameter!"
-        return -1
+        return 1
     }
 
     String eventType = "CUSTOM_CONFIGURATION"
 
-    int errorCode = 0
-
+    def postBody = [
+      eventType: eventType,
+      attachRules: [tagRule: tagRule],
+      tags: tagRule[0].tags,
+      description: description,
+      source: source,
+      configuration: configuration,
+      customProperties: customProperties
+    ]
 
     def http = new HTTPBuilder( dtTenantUrl + '/api/config/v1/events' )
 
     http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
       headers.'Content-Type' = 'application/json'
-      body = [
-        eventType: eventType,
-        attachRules: {
-          tagRule: [{
-            meTypes: [
-              tagRule[0].meTypes[0].meType
-            ]
-          }]
-        }
-        tags: tagRule[0].tags,
-        description: description,
-        source: source,
-        configuration: configuration,
-        customProperties: customProperties
-      ]
+      body = postBody
+
       response.success = { resp, json ->
-        println "Config Event Posted Successfully! ${resp.status}"
+        echo "Event Posted Successfully! ${resp.status}"
       }
       response.failure = { resp, json ->
-        throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
+        echo "[dt_pushDynatraceConfigurationEvent] Failed To Post Event: " + resp.toMapString()
+        return 1
       }
     }
 
