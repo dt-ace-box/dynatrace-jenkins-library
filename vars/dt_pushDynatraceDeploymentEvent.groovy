@@ -40,32 +40,32 @@ def call( Map args ) {
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
   http.request( POST, JSON ) { req ->
-    headers.'Authorization' = "Api-Token ${dtApiToken}"
-    headers.'Content-Type' = 'application/json'
-    body = [
-      eventType: eventType,
-      attachRules: {
-        tagRule: [{
-          meTypes: [
-            tagRule[0].meTypes[0].meType
-          ]
-        }]
-      },
-      deploymentName: deploymentName,
-      deploymentVersion: deploymentVersion,
-      deploymentProject: deploymentProject,
-      ciBackLink: ciBackLink,
-      remediationAction: remediationAction,
-      tags: tagRule[0].tags,
-      source: "Jenkins"
-    ]
-    response.success = { resp, json ->
-      echo "Event Posted Successfully! ${resp.status}"
-    }
-    response.failure = { resp, json ->
-      echo "Failed To Post Event: " + args.toMapString()
-      throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
-    }
+      headers.'Authorization' = "Api-Token ${dtApiToken}"
+      headers.'Content-Type' = 'application/json'
+      body = [
+          eventType: eventType,
+          attachRules: {
+            tagRule: [{
+              meTypes: [
+                tagRule[0].meTypes[0].meType
+              ]
+            }]
+          },
+          deploymentName: deploymentName,
+          deploymentVersion: deploymentVersion,
+          deploymentProject: deploymentProject,
+          ciBackLink: ciBackLink,
+          remediationAction: remediationAction,
+          tags: tagRule[0].tags,
+          source: "Jenkins"
+      ]
+      response.success = { resp, json ->
+        echo "Event Posted Successfully! ${resp.status}"
+      }
+      response.failure = { resp, json ->
+        echo "Failed To Post Event: " + args.toMapString()
+        throw new Exception("Failed to POST Configuration Event. \nargs: \n${args.toMapString()}")
+      }
   }
   println "Why the f*** isn't the requet being sent?"
 }
