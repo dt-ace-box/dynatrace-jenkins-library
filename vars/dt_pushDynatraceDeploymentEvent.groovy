@@ -1,7 +1,7 @@
 @Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1' )
 
 import groovyx.net.http.HTTPBuilder
-// import groovy.json.JsonOutput
+import groovy.json.JsonOutput
 import static groovyx.net.http.Method.*
 import static groovyx.net.http.ContentType.*
 
