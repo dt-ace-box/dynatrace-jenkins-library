@@ -32,14 +32,14 @@ def call( Map args ) {
 
   String eventType = "CUSTOM_INFO"
 
-  def postBody = new Map([
+  def postBody = [
     eventType: eventType,
     attachRules: [tagRule: tagRule],
     description: description,
     customProperties: customProperties,
     tags: tagRule[0].tags,
     source: source
-  ])
+  ]
 
 
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
