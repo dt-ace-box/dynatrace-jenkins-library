@@ -24,6 +24,8 @@ def call( Map args ) {
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
+  println "Imported Variables."
+
   // check minimum required params
   if(tagRule == "" ) {
     echo "tagRule is a mandatory parameter!"
