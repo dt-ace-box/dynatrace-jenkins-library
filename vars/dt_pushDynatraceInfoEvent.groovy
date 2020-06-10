@@ -23,6 +23,10 @@ def call( Map args ) {
   String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
   String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
 
+  String description = args.containsKey("description") ? args.description : ""
+  String source = args.containsKey("source") ? args.deploymentVersion : "Jenkins"
+  String title = args.containsKey("title") ? args.deploymentProject : ""
+
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
@@ -32,16 +36,19 @@ def call( Map args ) {
     return 1
   }
 
-  String eventType = "CUSTOM_DEPLOYMENT"
+  String eventType = "CUSTOM_INFO"
 
   def postBody = [
     eventType: eventType,
     attachRules: [tagRule: tagRule],
-    deploymentName: deploymentName,
-    deploymentVersion: deploymentVersion,
-    deploymentProject: deploymentProject,
-    ciBackLink: ciBackLink,
-    remediationAction: remediationAction,
+    description: description,
+    customProperties: customProperties,
+    source: source,
+    // deploymentName: deploymentName,
+    // deploymentVersion: deploymentVersion,
+    // deploymentProject: deploymentProject,
+    // ciBackLink: ciBackLink,
+    // remediationAction: remediationAction,
     tags: tagRule[0].tags,
     source: "Jenkins"
   ]
