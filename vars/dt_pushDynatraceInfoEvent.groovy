@@ -32,7 +32,7 @@ def call( Map args ) {
     return 1
   }
 
-  String eventType = "CUSTOM_DEPLOYMENT"
+  String eventType = "CUSTOM_CONFIGURATION"
 
   def postBody = [
     eventType: eventType,
