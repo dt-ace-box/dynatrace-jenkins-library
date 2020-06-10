@@ -17,11 +17,9 @@ def call( Map args ) {
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
-  String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
-  String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
-  String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
-  String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
-  String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
+  String description = args.containsKey("description") ? args.description : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String title = args.containsKey("title") ? args.title : ""
 
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
@@ -32,18 +30,15 @@ def call( Map args ) {
     return 1
   }
 
-  String eventType = "CUSTOM_CONFIGURATION"
+  String eventType = "CUSTOM_INFO"
 
   def postBody = [
     eventType: eventType,
     attachRules: [tagRule: tagRule],
-    deploymentName: deploymentName,
-    deploymentVersion: deploymentVersion,
-    deploymentProject: deploymentProject,
-    ciBackLink: ciBackLink,
-    remediationAction: remediationAction,
-    tags: tagRule[0].tags,
-    source: "Jenkins2"
+    description: description,
+    customProperties: customProperties,
+    source: source,
+    tags: tagRule[0].tags
   ]
 
 
@@ -59,7 +54,7 @@ def call( Map args ) {
       echo "Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
-      echo "[dt_pushDynatraceDeploymentEvent] Failed To Post Event: " + resp.toMapString()
+      echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
       return 1
     }
   }
