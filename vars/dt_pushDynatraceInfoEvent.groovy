@@ -43,9 +43,8 @@ def call( Map args ) {
     attachRules: [tagRule: tagRule],
     description: description,
     customProperties: customProperties,
-    source: source,
     tags: tagRule[0].tags,
-    source: "Jenkins"
+    source: source
   ]
 
 
