@@ -24,7 +24,7 @@ def call( Map args ) {
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
-  println "Imported Variables."
+  println "Why does this get executed 5 times?"
 
   // check minimum required params
   if(tagRule == "" ) {

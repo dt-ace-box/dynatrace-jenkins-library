@@ -23,6 +23,7 @@ def call( Map args ) {
   String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
   String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
 
+  println "Posting Custom Deployment event..."
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
