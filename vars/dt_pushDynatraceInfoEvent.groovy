@@ -43,7 +43,7 @@ def call( Map args ) {
     ciBackLink: ciBackLink,
     remediationAction: remediationAction,
     tags: tagRule[0].tags,
-    source: "Jenkins"
+    source: "Jenkins2"
   ]
 
 
