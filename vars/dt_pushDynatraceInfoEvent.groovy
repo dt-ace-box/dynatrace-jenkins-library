@@ -44,11 +44,6 @@ def call( Map args ) {
     description: description,
     customProperties: customProperties,
     source: source,
-    // deploymentName: deploymentName,
-    // deploymentVersion: deploymentVersion,
-    // deploymentProject: deploymentProject,
-    // ciBackLink: ciBackLink,
-    // remediationAction: remediationAction,
     tags: tagRule[0].tags,
     source: "Jenkins"
   ]
