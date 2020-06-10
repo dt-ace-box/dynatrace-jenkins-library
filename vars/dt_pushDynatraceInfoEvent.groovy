@@ -10,7 +10,7 @@ import static groovyx.net.http.ContentType.*
 
   Returns either 0(=no errors), 1(=pushing event failed)
 \***************************/
-// @NonCPS
+@NonCPS
 def call( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
