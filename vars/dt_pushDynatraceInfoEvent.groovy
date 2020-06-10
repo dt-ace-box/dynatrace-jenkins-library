@@ -55,6 +55,7 @@ def call( Map args ) {
 
     response.success = { resp, json ->
       println "Event Posted Successfully! ${resp.status}"
+      return 0
     }
     response.failure = { resp, json ->
       println "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
