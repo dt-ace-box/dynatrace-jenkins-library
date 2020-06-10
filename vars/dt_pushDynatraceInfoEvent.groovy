@@ -54,10 +54,10 @@ def call( Map args ) {
     body = postBody
 
     response.success = { resp, json ->
-      echo "Event Posted Successfully! ${resp.status}"
+      println "Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
-      echo "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
+      println "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toMapString()
       return 1
     }
   }
