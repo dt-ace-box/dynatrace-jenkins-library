@@ -17,12 +17,12 @@ def call( Map args ) {
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
-  String description = args.containsKey("description") ? args.description : ""
-  String source = args.containsKey("source") ? args.deploymentVersion : "Jenkins"
-  String title = args.containsKey("title") ? args.deploymentProject : ""
+  // String description = args.containsKey("description") ? args.description : ""
+  // String source = args.containsKey("source") ? args.deploymentVersion : "Jenkins"
+  // String title = args.containsKey("title") ? args.deploymentProject : ""
 
 
-  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+  // def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
   if(tagRule == "" ) {
@@ -35,10 +35,10 @@ def call( Map args ) {
   def postBody = [
     eventType: eventType,
     attachRules: [tagRule: tagRule],
-    description: description,
-    customProperties: customProperties,
-    tags: tagRule[0].tags,
-    source: source
+    // description: description,
+    // customProperties: customProperties,
+    // source: source,
+    tags: tagRule[0].tags
   ]
 
 
