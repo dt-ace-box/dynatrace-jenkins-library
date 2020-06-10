@@ -24,8 +24,8 @@ def call( Map args ) {
   String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
 
   String description = args.containsKey("description") ? args.description : ""
-  String source = args.containsKey("source") ? args.deploymentVersion : "Jenkins"
-  String title = args.containsKey("title") ? args.deploymentProject : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String title = args.containsKey("title") ? args.title : ""
 
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
