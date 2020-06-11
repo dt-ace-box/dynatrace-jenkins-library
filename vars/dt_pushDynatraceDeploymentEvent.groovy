@@ -56,7 +56,7 @@ def call( Map args ) {
     body = postBody
 
     response.success = { resp, json ->
-      echo "Event Posted Successfully! ${resp.status}"
+      echo "Deployment Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
       echo """[dt_pushDynatraceDeploymentEvent] Failed To Post Event: ${resp.statusLine}

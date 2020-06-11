@@ -51,7 +51,7 @@ def call( Map args ) {
     body = postBody
 
     response.success = { resp, json ->
-      println "Event Posted Successfully! ${resp.status}"
+      println "Info Event Posted Successfully! ${resp.status}"
       return 0
     }
     response.failure = { resp, json ->
