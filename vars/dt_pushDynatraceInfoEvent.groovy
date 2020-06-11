@@ -16,9 +16,9 @@ def call( Map args ) {
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
 
   String description = args.containsKey("description") ? args.description : ""
-  String source = args.containsKey("source") ? args.source : "Jenkins"
   String title = args.containsKey("title") ? args.title : ""
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]

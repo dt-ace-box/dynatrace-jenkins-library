@@ -16,6 +16,7 @@ def call( Map args ) {
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
 
   String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
   String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
@@ -44,7 +45,7 @@ def call( Map args ) {
     ciBackLink: ciBackLink,
     remediationAction: remediationAction,
     tags: tagRule[0].tags,
-    source: "Jenkins"
+    source: source
   ]
 
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
