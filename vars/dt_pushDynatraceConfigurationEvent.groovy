@@ -38,8 +38,8 @@ def call(Map args){
       tags: tagRule[0].tags,
       description: description,
       source: source,
-      configuration: configuration//,
-      // customProperties: customProperties
+      configuration: configuration,
+      customProperties: customProperties
     ]
 
     def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
