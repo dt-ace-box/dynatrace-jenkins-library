@@ -38,8 +38,8 @@ def call(Map args){
       tags: tagRule[0].tags,
       description: description,
       source: source,
-      configuration: configuration,
-      customProperties: customProperties
+      configuration: configuration//,
+      // customProperties: customProperties
     ]
 
     def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
@@ -55,8 +55,11 @@ def call(Map args){
       response.failure = { resp, json ->
         echo "[dt_pushDynatraceConfigurationEvent] Failed To Post Event: " + resp.statusLine.statusCode
         echo "  Message: ${resp.statusLine}"
+        echo "  JSON: ${JsonOutput.prettyPrint(json)}"
+        echo "  POST Body: ${postBody.toMapString()}"
+        echo "  Data: ${resp.error}"
+        echo "  Data: ${resp.message}"
         echo "  Data: ${resp.data}"
-        echo "  Request Data: ${postBody.toMapString()}"
 
         return 1
       }
