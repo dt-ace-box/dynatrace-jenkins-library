@@ -21,10 +21,7 @@ def call( Map args ) {
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String title = args.containsKey("title") ? args.title : ""
 
-
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
-
-  println "Why does this get executed 5 times?"
 
   // check minimum required params
   if(tagRule == "" ) {
@@ -58,7 +55,7 @@ def call( Map args ) {
       return 0
     }
     response.failure = { resp, json ->
-      println "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.toString()
+      println "[dt_pushDynatraceInfoEvent] Failed To Post Event: " + resp.statusLine
       return 1
     }
   }

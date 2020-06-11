@@ -60,7 +60,7 @@ def call( Map args ) {
       echo "Event Posted Successfully! ${resp.status}"
     }
     response.failure = { resp, json ->
-      echo "[dt_pushDynatraceDeploymentEvent] Failed To Post Event: " + resp.toString()
+      echo "[dt_pushDynatraceDeploymentEvent] Failed To Post Event: " + resp.statusLine
       return 1
     }
   }
