@@ -47,7 +47,6 @@ def call( Map args ) {
     source: "Jenkins"
   ]
 
-
   def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
 
   http.request( POST, JSON ) { req ->
@@ -61,6 +60,7 @@ def call( Map args ) {
     }
     response.failure = { resp, json ->
       echo "[dt_pushDynatraceDeploymentEvent] Failed To Post Event: " + resp.statusLine
+      echo "Request Data: ${postBody.toMapString()}"
       return 1
     }
   }

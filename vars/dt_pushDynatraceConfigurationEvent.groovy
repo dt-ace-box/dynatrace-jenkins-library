@@ -54,6 +54,8 @@ def call(Map args){
       }
       response.failure = { resp, json ->
         echo "[dt_pushDynatraceConfigurationEvent] Failed To Post Event: " + resp.statusLine
+        echo "  Request Data: ${postBody.toMapString()}"
+
         return 1
       }
     }
