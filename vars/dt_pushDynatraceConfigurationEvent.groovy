@@ -58,7 +58,6 @@ def call(Map args){
         echo "  JSON: ${json.toMapString()}"
         echo "  <------"
         echo "  POST Body: ${postBody.toMapString()}"
-        echo "  Data: ${resp.error}"
         echo "  Data: ${resp.message}"
         echo "  Data: ${resp.data}"
 
